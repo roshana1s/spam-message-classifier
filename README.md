@@ -145,12 +145,11 @@ tokenizer = RobertaTokenizer.from_pretrained("roshana1s/spam-message-classifier"
 ## 📊 Detailed Results
 
 ### Confusion Matrix
-```
-          | Predicted Ham | Predicted Spam
-----------|---------------|---------------
-Actual Ham|      722     |       2
-Actual Spam|       4      |     108
-```
+
+|               | Predicted Ham | Predicted Spam |
+|---------------|---------------|----------------|
+| **Actual Ham**  | 722           | 2              |
+| **Actual Spam** | 4             | 108            |
 
 ### Performance Breakdown
 - **True Positives (Spam correctly identified)**: 108
