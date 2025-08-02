@@ -74,7 +74,8 @@ Used **Optuna** framework to optimize (25 trials):
 ```
 spam-message-classifier/
 ├── data/
-│   └── spam.csv
+│   └── sms_spam_uci.csv
+│   └── Dataset_5971.csv
 ├── notebooks/
 │   └── spam-message-classifier.ipynb    # Complete development notebook
 ├── README.md                           # This file
