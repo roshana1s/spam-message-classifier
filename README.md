@@ -3,7 +3,7 @@
 [![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
 [![Hugging Face](https://img.shields.io/badge/🤗%20Hugging%20Face-Model-yellow)](https://huggingface.co/roshana1s/spam-message-classifier)
 
-A state-of-the-art spam message classifier built with **RoBERTa** transformer model, fine-tuned on the SMS Spam Collection Dataset. This model achieves exceptional performance with **97.30% F1-score** for spam detection and **99.28% overall accuracy**, making it ideal for real-world deployment in messaging platforms and content moderation systems.
+A state-of-the-art spam message classifier built with **RoBERTa** transformer model, fine-tuned on multiple SMS spam datasets. This model achieves exceptional performance with **0.9963 F1-score** for spam detection and **99.88% overall accuracy**, making it ideal for real-world deployment in messaging platforms and content moderation systems.
 
 ## 🎯 Overview
 
@@ -11,8 +11,8 @@ This project develops an intelligent spam detection system using advanced natura
 
 ### Key Features
 - **🤖 Transformer-based Architecture**: Built on RoBERTa-base for superior text understanding
-- **⚡ High Performance**: 97.30% F1-score for spam detection, 99.28% overall accuracy
-- **🔧 Hyperparameter Optimization**: Automated tuning using Optuna framework  
+- **⚡ High Performance**: 0.9963 F1-score for spam detection, 99.88% overall accuracy
+- **🔧 Hyperparameter Optimization**: Automated tuning using Optuna framework (25 trials)
 - **⚖️ Class Imbalance Handling**: Weighted loss function for optimal training
 - **📊 Comprehensive Evaluation**: Multiple metrics including precision, recall, and confusion matrix
 - **🚀 Production-Ready**: Saved in Hugging Face format for easy deployment
@@ -20,16 +20,19 @@ This project develops an intelligent spam detection system using advanced natura
 ## 📊 Model Performance
 
 ### Final Results on Test Set:
-- **Overall Accuracy**: 99.28%
-- **Weighted F1-Score**: 99.28%
-- **Spam F1-Score**: 97.30% ✅ (Exceeds 95% acceptance threshold)
-- **Spam Precision**: 98.18% (Low false positives)
-- **Spam Recall**: 96.43% (High spam detection rate)
-- **Ham Precision**: 99.45%
-- **Ham Recall**: 99.72%
+- **Overall Accuracy**: 99.88%
+- **Weighted F1-Score**: 0.9988
+- **Spam F1-Score**: 0.9963 ✅ (Exceeds 0.95 acceptance threshold)
+- **Spam Precision**: 100.00% (Perfect precision - no false alarms)
+- **Spam Recall**: 99.27% (High spam detection rate)
+- **Ham Precision**: 99.86%
+- **Ham Recall**: 100.00%
 
 ### Acceptance Criteria
-> ✅ **Model Accepted**: The F1-score for spam class (97.30%) exceeds our predefined acceptance threshold of 95%, indicating reliable performance for real-world deployment.
+> ✅ **Model Accepted**: The F1-score for spam class (0.9963) significantly exceeds our predefined acceptance threshold of 0.95, indicating exceptional performance for real-world deployment.
+
+### Generalizability
+> 📊 **Strong Generalization**: All performance metrics are evaluated on a **completely unseen test set** (15% of data, ~1,725 messages) that was never used during training or hyperparameter tuning, ensuring robust real-world performance and preventing overfitting.
 
 ## 🏗️ Architecture & Methodology
 
@@ -47,24 +50,24 @@ This project develops an intelligent spam detection system using advanced natura
 5. **Evaluation**: Comprehensive metrics on held-out test set
 
 ### Hyperparameter Optimization
-Used **Optuna** framework to optimize:
-- **Dropout rates**: Hidden dropout (0.2-0.4), Attention dropout (0.1-0.2)
-- **Learning rate**: 1e-5 to 3e-5 range
-- **Weight decay**: 0.01 to 0.1 regularization
-- **Batch size**: 16 or 32 samples
-- **Gradient accumulation steps**: 1 or 2
-- **Training epochs**: 3 to 8 epochs
-- **Warmup ratio**: 0.05 to 0.15 for learning rate scheduling
+Used **Optuna** framework to optimize (25 trials):
+- **Dropout rates**: Hidden dropout (0.1-0.3), Attention dropout (0.1-0.2)
+- **Learning rate**: 1e-5 to 5e-5 range
+- **Weight decay**: 0.0 to 0.1 regularization
+- **Batch size**: 8, 16, or 32 samples
+- **Gradient accumulation steps**: 1 to 4
+- **Training epochs**: 2 to 5 epochs
+- **Warmup ratio**: 0.05 to 0.1 for learning rate scheduling
 
-**Best Parameters Found**:
-- Hidden dropout: 0.203
-- Attention dropout: 0.118  
-- Learning rate: 2.38e-05
-- Weight decay: 0.0625
+**Best Parameters Found (Trial 17/25)**:
+- Hidden dropout: 0.161
+- Attention dropout: 0.116  
+- Learning rate: 1.67e-05
+- Weight decay: 0.0235
 - Batch size: 16
-- Gradient accumulation steps: 1
-- Epochs: 8
-- Warmup ratio: 0.108
+- Gradient accumulation steps: 3
+- Epochs: 4
+- Warmup ratio: 0.0502
 
 ## 📁 Project Structure
 
@@ -103,21 +106,34 @@ tokenizer = RobertaTokenizer.from_pretrained("roshana1s/spam-message-classifier"
 
 ## 📖 Dataset
 
-**Source**: [SMS Spam Collection Dataset](https://www.kaggle.com/datasets/uciml/sms-spam-collection-dataset) from UCI Machine Learning Repository
+**Sources**: 
+1. **[SMS Spam Collection Dataset](https://www.kaggle.com/datasets/uciml/sms-spam-collection-dataset)** from UCI Machine Learning Repository
+2. **[SMS Phishing Dataset](https://data.mendeley.com/datasets/f45bkkt8pr/1)** by Sandhya Mishra & Devpriya Soni (2022)
 
-**Statistics**:
-- **Total Messages**: 5,572
-- **Ham Messages**: 4,825
-- **Spam Messages**: 747
+**Combined Dataset Statistics**:
+- **Total Messages**: 11,498 (entire combined dataset)
+- **Ham Messages**: 9,669 (84.1%)
+- **Spam Messages**: 1,829 (15.9%)
 - **Average Message Length**: ~80 characters
 - **Language**: English
 
+**Dataset Split**:
+- **Training Set**: 70% (~8,048 messages) - used for model training
+- **Validation Set**: 15% (~1,725 messages) - used for hyperparameter tuning
+- **Test Set**: 15% (~1,725 messages) - used for final evaluation (unseen data)
+
+**Dataset Details**:
+- **UCI SMS Spam**: Classic SMS spam detection dataset with ham/spam labels
+- **Mendeley SMS Phishing**: Modern phishing detection dataset including smishing attacks
+- **Combined Approach**: Merged datasets for comprehensive spam and phishing detection
+
 **Preprocessing Steps**:
-1. Label encoding (ham → 0, spam → 1)
-2. Text cleaning and normalization
-3. Train/validation/test split (70/15/15)
-4. Tokenization with RoBERTa tokenizer
-5. Dynamic padding and truncation
+1. Label encoding (ham → 0, spam → 1, smishing → 1)
+2. Text cleaning and normalization with Discord-specific preprocessing
+3. Dataset merging and deduplication
+4. Train/validation/test split (70/15/15)
+5. Tokenization with RoBERTa tokenizer
+6. Dynamic padding and truncation
 
 ## 🛠️ Technical Implementation
 
@@ -129,12 +145,6 @@ tokenizer = RobertaTokenizer.from_pretrained("roshana1s/spam-message-classifier"
 - **📈 Matplotlib/Seaborn**: Data visualization
 - **🐼 Pandas**: Data manipulation
 
-### Training Configuration
-- **GPU**: NVIDIA Tesla T4 (if available)
-- **Mixed Precision**: FP16 for memory efficiency
-- **Evaluation Strategy**: Step-based evaluation every 200 steps
-- **Best Model Selection**: Based on spam F1-score
-- **Early Stopping**: Load best model at end
 
 ### Custom Features
 - **Weighted Loss Function**: Handles class imbalance effectively
@@ -148,20 +158,20 @@ tokenizer = RobertaTokenizer.from_pretrained("roshana1s/spam-message-classifier"
 ```
           | Predicted Ham | Predicted Spam
 ----------|---------------|---------------
-Actual Ham|      722     |       2
-Actual Spam|       4      |     108
+Actual Ham|     1451     |       0
+Actual Spam|       2      |     272
 ```
 
 ### Performance Breakdown
-- **True Positives (Spam correctly identified)**: 108
-- **True Negatives (Ham correctly identified)**: 722  
-- **False Positives (Ham incorrectly flagged)**: 2
-- **False Negatives (Spam missed)**: 4
+- **True Positives (Spam correctly identified)**: 272
+- **True Negatives (Ham correctly identified)**: 1451  
+- **False Positives (Ham incorrectly flagged)**: 0
+- **False Negatives (Spam missed)**: 2
 
 ### Error Analysis
-- **False Positive Rate**: 0.28% (Ham incorrectly flagged as spam)
-- **Miss Rate**: 3.57% (Spam messages missed)
-- **False Alarm Rate**: Very low, ensuring minimal legitimate messages are flagged
+- **False Positive Rate**: 0.00% (Perfect - no ham flagged as spam)
+- **Miss Rate**: 0.73% (Extremely low spam miss rate)
+- **False Alarm Rate**: 0.00% - ensuring no legitimate messages are incorrectly flagged
 
 ## 🎯 Use Cases
 
@@ -171,11 +181,6 @@ This spam classifier is ideal for:
 - Discord bot moderation (Primary use case)
 - SMS filtering systems
 - Chat application content filtering
-
-### 📧 **Email Security**
-- Email spam detection
-- Corporate message filtering
-- Customer service automation
 
 ### 🛡️ **Content Moderation**
 - Social media platforms
@@ -193,14 +198,6 @@ This model serves as the core spam detection component for **Amy**, an intellige
 - Detects spam messages in real-time
 - Provides automated content moderation
 - Maintains server quality and user experience
-
-
-##  Acknowledgments
-
-- **UCI Machine Learning Repository** for the SMS Spam Collection Dataset
-- **Hugging Face** for the transformers library and model hosting
-- **Facebook AI** for the RoBERTa base model
-- **Optuna** team for the hyperparameter optimization framework
 
 ---
 
