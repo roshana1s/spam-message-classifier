@@ -145,9 +145,9 @@ tokenizer = RobertaTokenizer.from_pretrained("roshana1s/spam-message-classifier"
 - **📈 Matplotlib/Seaborn**: Data visualization
 - **🐼 Pandas**: Data manipulation
 
-
 ### Custom Features
 - **Weighted Loss Function**: Handles class imbalance effectively
+- **Label Smoothing**: 0.1 to prevent overconfidence
 - **Custom Metrics**: Specialized spam detection metrics
 - **Confusion Matrix Analysis**: Detailed error analysis
 - **Class-specific Performance**: Separate metrics for ham and spam
