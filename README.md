@@ -3,7 +3,7 @@
 [![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
 [![Hugging Face](https://img.shields.io/badge/🤗%20Hugging%20Face-Model-yellow)](https://huggingface.co/roshana1s/spam-message-classifier)
 
-A state-of-the-art spam message classifier built with **RoBERTa** transformer model, fine-tuned on multiple SMS spam datasets. This model achieves exceptional performance with **0.9963 F1-score** for spam detection and **99.88% overall accuracy**, making it ideal for real-world deployment in messaging platforms and content moderation systems.
+A state-of-the-art spam message classifier built with **RoBERTa** transformer model, fine-tuned on multiple SMS spam datasets. This model achieves exceptional performance with **0.9982 F1-score** for spam detection and **99.94% overall accuracy**, making it ideal for real-world deployment in messaging platforms and content moderation systems.
 
 ## 🎯 Overview
 
@@ -11,28 +11,35 @@ This project develops an intelligent spam detection system using advanced natura
 
 ### Key Features
 - **🤖 Transformer-based Architecture**: Built on RoBERTa-base for superior text understanding
-- **⚡ High Performance**: 0.9963 F1-score for spam detection, 99.88% overall accuracy
+- **⚡ High Performance**: 0.9982 F1-score for spam detection, 99.94% overall accuracy
 - **🔧 Hyperparameter Optimization**: Automated tuning using Optuna framework (25 trials)
 - **⚖️ Class Imbalance Handling**: Weighted loss function for optimal training
+- **🔗 URL Bias Mitigation**: Enhanced with real-world ham messages containing links
 - **📊 Comprehensive Evaluation**: Multiple metrics including precision, recall, and confusion matrix
 - **🚀 Production-Ready**: Saved in Hugging Face format for easy deployment
 
 ## 📊 Model Performance
 
 ### Final Results on Test Set:
-- **Overall Accuracy**: 99.88%
-- **Weighted F1-Score**: 0.9988
-- **Spam F1-Score**: 0.9963 ✅ (Exceeds 0.95 acceptance threshold)
+- **Overall Accuracy**: 99.94%
+- **Weighted F1-Score**: 0.9994
+- **Spam F1-Score**: 0.9982 ✅ (Exceeds 0.95 acceptance threshold)
 - **Spam Precision**: 100.00% (Perfect precision - no false alarms)
-- **Spam Recall**: 99.27% (High spam detection rate)
-- **Ham Precision**: 99.86%
+- **Spam Recall**: 99.64% (High spam detection rate)
+- **Ham Precision**: 99.93%
 - **Ham Recall**: 100.00%
 
 ### Acceptance Criteria
-> ✅ **Model Accepted**: The F1-score for spam class (0.9963) significantly exceeds our predefined acceptance threshold of 0.95, indicating exceptional performance for real-world deployment.
+> ✅ **Model Accepted**: The F1-score for spam class (0.9982) significantly exceeds our predefined acceptance threshold of 0.95, indicating exceptional performance for real-world deployment.
 
 ### Generalizability
 > 📊 **Strong Generalization**: All performance metrics are evaluated on a **completely unseen test set** (15% of data, ~1,725 messages) that was never used during training or hyperparameter tuning, ensuring robust real-world performance and preventing overfitting.
+
+## 🔗 Handling `<URL>` Bias in Dataset
+
+During initial training, the model became overconfident and labeled almost all messages containing `<URL>` as spam, even if some were legitimate ham. To mitigate this bias, I went through Discord servers and collected additional **real ham messages containing links**.
+
+This helps the model understand that URLs can appear in non-spam messages and improves generalization for real-world inference, particularly important for Discord bot deployment where legitimate messages often contain links.
 
 ## 🏗️ Architecture & Methodology
 
@@ -158,18 +165,18 @@ tokenizer = RobertaTokenizer.from_pretrained("roshana1s/spam-message-classifier"
 
 |               | Predicted Ham | Predicted Spam |
 |---------------|---------------|----------------|
-| Actual Ham    |     1451      |       0        |
-| Actual Spam   |       2       |      272       |
+| Actual Ham    |     1456      |       0        |
+| Actual Spam   |       1       |      274       |
 
 ### Performance Breakdown
-- **True Positives (Spam correctly identified)**: 272
-- **True Negatives (Ham correctly identified)**: 1451  
+- **True Positives (Spam correctly identified)**: 274
+- **True Negatives (Ham correctly identified)**: 1456  
 - **False Positives (Ham incorrectly flagged)**: 0
-- **False Negatives (Spam missed)**: 2
+- **False Negatives (Spam missed)**: 1
 
 ### Error Analysis
 - **False Positive Rate**: 0.00% (Perfect - no ham flagged as spam)
-- **Miss Rate**: 0.73% (Extremely low spam miss rate)
+- **Miss Rate**: 0.36% (Extremely low spam miss rate)
 - **False Alarm Rate**: 0.00% - ensuring no legitimate messages are incorrectly flagged
 
 ## 🎯 Use Cases
