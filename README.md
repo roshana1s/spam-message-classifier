@@ -51,7 +51,7 @@ This helps the model understand that URLs can appear in non-spam messages and im
 
 ### Training Strategy
 1. **Data Preprocessing**: SMS text cleaning and label encoding
-2. **Tokenization**: Dynamic padding with optimal max length
+2. **Tokenization**: Static padding to a fixed length of 128 tokens
 3. **Class Balancing**: Weighted loss function to handle imbalanced dataset
 4. **Hyperparameter Optimization**: Optuna-based automated tuning
 5. **Evaluation**: Comprehensive metrics on held-out test set
@@ -141,7 +141,7 @@ tokenizer = RobertaTokenizer.from_pretrained("roshana1s/spam-message-classifier"
 3. Dataset merging and deduplication
 4. Train/validation/test split (70/15/15)
 5. Tokenization with RoBERTa tokenizer
-6. Dynamic padding and truncation
+6. Static padding and truncation
 
 ## 🛠️ Technical Implementation
 
