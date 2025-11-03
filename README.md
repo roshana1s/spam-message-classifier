@@ -66,7 +66,7 @@ Used **Optuna** framework to optimize (25 trials):
 - **Training epochs**: 2 to 5 epochs
 - **Warmup ratio**: 0.05 to 0.1 for learning rate scheduling
 
-**Best Parameters Found (Trial 17/25)**:
+**Best Parameters Found (Trial 6/25)**:
 - Hidden dropout: 0.10069482002001506
 - Attention dropout: 0.12460257350587067
 - Learning rate: 4.976184540342024e-05
